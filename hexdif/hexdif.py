@@ -62,8 +62,8 @@ try:
             line = line.strip()
             for base in line:
                 if base not in alphabet: error('Invalid letter "%s" in kmer "%s"' % (base, line))
-                if k is None: k = len(line)
-                if len(line) != k: error('kmer "%s" is not of length %d' % (line, k))
+            if k is None: k = len(line)
+            if len(line) != k: error('kmer "%s" is not of length %d' % (line, k))
             input_kmers.add(line[0:(k+1)])
 except: error('failed to process input file "%s"' % input_filename)
 n_kmers = len(input_kmers)
@@ -80,8 +80,11 @@ if n_kmers == max_kmers: error('all possible %d-mers in input data' % k)
 input_consensus = []
 for i in range(0, k):
     bases = [input_kmers[j][i] for j in range(0, n_kmers)]
+    #if i==0, then bases == ['A','A','A','A','A','T','T','C']
     pos_consensus = [(b, bases.count(b)) for b in alphabet]
+    #if i == 0, then pos_consensus == [('A', 5), ('C', 1), ('G', 0), ('T', 2)]
     pos_consensus.sort(key=lambda x: x[1], reverse=False)
+    #if i == 0, then pos_consensus == [('G', 0), ('C', 1), ('T', 2), ('A', 5)]
     input_consensus.append(pos_consensus)
 
 # Print the consensus (if print_consensus is True):
